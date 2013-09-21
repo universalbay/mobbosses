@@ -1,0 +1,7 @@
+name: MobBosses
+main: com.universalbay.mobbosses.MobBosses
+version: ${project.version}
+description: >
+    Gives the mob boss system to the RotMGMC bukkit plugin.
+   
+commands:
