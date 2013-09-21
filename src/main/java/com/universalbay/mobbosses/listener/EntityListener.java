@@ -9,12 +9,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import com.universalbay.mobbosses.MobBosses;
 import com.universalbay.mobbosses.MobSwarmWorld;
+import com.universalbay.mobbosses.event.MobSwarmDeathEvent;
 import com.universalbay.mobbosses.mob.MobSwarm;
 import com.universalbay.mobbosses.mob.SwarmBossEntity;
 import com.universalbay.mobbosses.mob.SwarmEntity;
@@ -27,8 +26,8 @@ public class EntityListener implements Listener {
 		Entity killed = event.getEntity();
 		Entity killer = null;
 		if (event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent) {
-			EntityDamageByEntityEvent damageevent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
-			killer = damageevent.getDamager();
+			EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
+			killer = damageEvent.getDamager();
 		}
 		if (killed instanceof Creature) {
 			Creature entity = (Creature) event.getEntity();
@@ -44,6 +43,7 @@ public class EntityListener implements Listener {
 					swarm.reward();
 					if (killer != null && killer instanceof Player) {
 						Player player = (Player) killer;
+						Bukkit.getServer().getPluginManager().callEvent(new MobSwarmDeathEvent(swarm));
 						player.sendMessage(ChatColor.GREEN + "You have defeated a MobSwarm!");
 					}
 				}
